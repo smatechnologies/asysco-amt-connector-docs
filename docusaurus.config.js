@@ -3,7 +3,7 @@ module.exports = {
   title: 'SMA Technologies Help',
   tagline: 'Asysco AMT Connector',
   url: 'https://help.smatechnologies.com',
-  baseUrl: '/opcon/connctors/asysco-amt/',
+  baseUrl: '/opcon/connectors/asysco-amt/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
