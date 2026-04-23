@@ -1,43 +1,91 @@
-# Operation
+---
+sidebar_label: 'Operation'
+title: Asysco AMT job definitions
+description: "Reference for defining Asysco AMT jobs in OpCon, including job parameters, completion codes, and job log output."
+tags:
+  - Reference
+  - Automation Engineer
+  - Jobs
+---
 
-Within OpCon the job definitions are defined using the Asysco AMT Job-Subtype. The subtype is installed into the Enterprise Manager dropins directory during installation and is visible when a Windows Job Type is selected.
-The Job-Subtype consists of an upper and a lower portion with the upper portion defining the location of the connector, the Windows User that the connector will execute under and the job type selected from the drop-down list.
+# Asysco AMT job definitions
 
-## Asysco AMT Job definitions
-The Cegid ORLI Definition, defines various jobs that can be executed within the Cegid ORLI environment using the defined web services. 
-These include requestFiles, requestLog, requestStatus, requestTechnicalData and executeRequest job types. 
+**Theme:** Configure  
+**Who Is It For?** Automation Engineer
 
-When defining the Cegid ORLI job, first select a Job Type of Windows and then Cegid ORLI Job Subtype. The Cegid ORLI Definition screen will then appear.
+Within OpCon, job definitions are created using the Asysco AMT job subtype. The subtype is installed into the Enterprise Manager `dropins` directory during installation and is visible when a Windows job type is selected. The job subtype consists of an upper and a lower portion — the upper portion defines the connector location, the Windows user the connector runs under, and the job type.
 
-The job definition consists of 2 separate areas, with a general area required by all Cegid Orli jobs and specific information depending on the selected job type (requestFiles, requestLog, requestStatus, requestTechnicalData and executeRequest).
- 
-### General Information
- 
-The general area contains the following fields:
+- Use this reference when creating or modifying AMT job definitions or when diagnosing a failed AMT job using completion codes
+- AMT completion codes map directly to OpCon exit codes, giving standard OpCon dependency and event logic full control over AMT job outcomes
+- Job output is automatically attached to the OpCon job log when a job completes, eliminating manual log collection from the AMT environment
 
-Field | Description
---------- | -----------
-**User Id**          | The name of the Windows batch user that will be used execute the connector. This user has nothing to do with the Asysco LION environment.
-**Connector Path**   | Contains the installed location of the Asysco AMT Connector. This consists of a global property value which contains the root installation directory. Default value is **AMTPath**. If more than one Orli Connectors is installed on the same system, then an additional global property should be defined and the entry in this field updated. 
-**Job Type**         | The action to perform can be selected from the drop-down list. Currently only **Start** is supported for the connector. 
+## How to implement it
 
-### Start Operation Information 
- 
-The field definitions for a Start job consist of the Application Name, either a Job Name or a File Name, the optional Windows User to execute the job under within the AMT Environment (RunAs), optionally any Task Values to submit to the job and any parameters that the job requires. In the AMT interface two values are set by default by the connector. The user that submitted the task will be set to OPCON (not be confused with the RunAs value and the Queue that the request will be submitted on will be set to BATCH.
+### Prerequisites
 
-The **Start** TAB contains the following fields.
+The Asysco AMT Connector must be installed and configured, and the Asysco AMT job subtype must be installed in Enterprise Manager. See [Installation](./installation.md).
 
-Field | Description
---------- | -----------
-**Application Name**   | The AMT Application Name. Most customers have only a single application installed within the AMT Environment. Suggest that this be a global token field [[AMT_APPLICATION]] by default.
-**Job Name**           | The name of the job to execute in the AMT environment. The Application Name and the Job Name combination must be a unique value within the AMT Environment. 
-**File Name**          | (Optional) Absolute path or UNC definition of a PowerShell script to execute. When present will override the stored job to execute meaning that if the script name has the same name as job definition, the script will be executed and not the definition defined within the AMT Environment.
-**User**               | (Optional) Defines the user that the task will execute under within the AMT Environment (also known as RunAs). If not present, task will run under the default user defined for the Application.
-**Task Value**         | (Optional) Defines the Task values used to modify, override, or elaborate existing task attributes that apply to the job.
-**Script Parameters**  | (Optional) Defines the parameters to be passed to the task. When defining multiple parameters, they should be entered on separate lines.
+### Steps
 
-### Failure Criteria
-The AMT Connector returns the actual completion code of the executed task within the AMT Environment. This means that a successful execution will return an error code of 4.
+To create an Asysco AMT job definition, complete the following steps:
+
+1. Go to the **Administration** menu and select **Job Master**.
+2. Select the schedule.
+3. Select the **Add** button.
+4. In the **Job Type** list, select **Windows**.
+5. In the **Job Sub-Type** list, select **Asysco AMT**. The Asysco AMT job definition panel is displayed.
+6. In the **User Id** field, enter the Windows user account under which the connector runs.
+7. In the **Connector Path** field, enter the path to the connector installation or the global property (for example, `[[AMTPath]]`).
+8. In the **Job Type** field, select **Start** from the list.
+9. Select the **Start** tab.
+10. In the **Application Name** field, enter the AMT application name or the global token `[[AMT_APPLICATION]]`.
+11. In the **Job Name** field, enter the name of the AMT job to run.
+12. Configure any optional fields as needed.
+13. Select the **Save** button. The job definition is saved.
+
+### Example
+
+A job that runs the `RUN_PARAMETERTESTA` job in the `DEMO2` AMT application uses these settings on the Start tab:
+
+| Field | Value |
+|---|---|
+| **Application Name** | `DEMO2` |
+| **Job Name** | `RUN_PARAMETERTESTA` |
+| **Script Parameters** | `'PARAM'` |
+
+## Configuration options
+
+### General information
+
+| Setting | What It Does | Default | Notes |
+|---|---|---|---|
+| **User Id** | Windows user account under which the connector runs | — | This user is unrelated to the Asysco LION environment |
+| **Connector Path** | Full path to the connector installation directory | `[[AMTPath]]` | Use a global property; define an additional property when multiple connectors are installed on the same system |
+| **Job Type** | The type of job action to perform | — | Currently only **Start** is supported |
+
+### Start tab
+
+| Setting | What It Does | Default | Notes |
+|---|---|---|---|
+| **Application Name** | The AMT application name | — | Suggest using global token `[[AMT_APPLICATION]]` for environments with a single application |
+| **Job Name** | The name of the AMT job to run | — | Must be unique in combination with Application Name within the AMT environment |
+| **File Name** | Absolute path or UNC path of a PowerShell script to run | — | Optional; when present, overrides the stored job definition |
+| **User** | AMT user under which the task runs within the AMT environment (RunAs) | Application default | Optional; if not specified, the application's default user is used |
+| **Task Value** | Values to modify, override, or elaborate existing task attributes | — | Optional |
+| **Script Parameters** | Parameters to pass to the task | — | Optional; enter each parameter on a separate line |
+
+## Exception handling
+
+The AMT Connector returns the actual completion code of the job from the AMT environment. A successful run returns exit code 4. The following table covers common failure scenarios.
+
+| Symptom | Meaning | Fix |
+|---|---|---|
+| Exit code 24 (AUTHENTICATION_ERROR) | The AMT user credentials in `Connector.config` are invalid | Verify USER and PASSWORD values are correct and properly encrypted using `Encrypt.exe` |
+| Exit code 99 (INVALID AMT USER) | The RunAs user specified in the **User** field does not exist in the AMT environment | Verify the user exists in AMT Control Center and enter the correct value in the job definition |
+| Exit code 11 (ERROR) with message "File not found" | The path specified in the **File Name** field does not exist | Verify the **File Name** path, or leave the field blank to run the stored AMT job definition |
+| Exit code 12 (ABORTED) | The job was intentionally stopped within the AMT business logic | Review the AMT job log via JORS for the reason the job was aborted |
+
+### Completion codes reference
 
 ```
 Completion Codes
@@ -53,7 +101,7 @@ Completion Codes
 8	RUN_FORCED             Forced start manual, start this job even when job server halted.
 9	RUN_DEBUG              When a report is started from Visual Studio.
 10	DEL_QUEUE              Job is deleted from queue.
-11	ERROR                  Job Ended in Error. When executing a script and the script does not exist, an error code of 11 will be returned with a description of ‘File not found’.
+11	ERROR                  Job Ended in Error. When executing a script and the script does not exist, an error code of 11 will be returned with a description of 'File not found'.
 12	ABORTED                The Job was aborted on purpose in the business-logic.
 13	WAIT FOR FILE          Waiting for a file.
 14	WAIT FOR INPUT REQUEST Waiting for Request.
@@ -70,9 +118,48 @@ Completion Codes
 
 ```
 
-### Job Log
-When a task is executing within the AMT Environment, the job log is written to the database. This includes the information about the task as well as any children of the task. 
-When the task completes the connector retrieves the information from the database and adds it to the job log of the OpCon job making it available via the JORS System.
+## Administration
+
+**Enabling and disabling jobs:** Individual OpCon jobs targeting the AMT environment can be enabled or disabled using standard OpCon job management in Enterprise Manager or Solution Manager.
+
+**Roles:** Automation Engineers create and manage AMT job definitions. System Administrators manage the connector installation and credentials.
+
+**Maintenance:** When the AMT application name changes, update the `[[AMT_APPLICATION]]` global property in OpCon to apply the change to all job definitions that reference the token.
+
+## Security considerations
+
+**Authentication:** The connector uses the AMT credentials configured in `Connector.config`. See [Installation](./installation.md) for credential management.
+
+**Authorization:** The AMT user defined in `Connector.config` must have appropriate privileges in AMT Control Center. The optional **User** (RunAs) field on the job definition must also reference a user defined in AMT.
+
+**Data security:** Job parameters are transmitted to the AMT environment through the web services interface. Communication is encrypted using TLS when `SERVER_USES_TLS=True` in `Connector.config`.
+
+**Sensitive data:** The **User** (RunAs) field references AMT user accounts. Do not use privileged AMT accounts unless required by the specific job.
+
+## Operations
+
+**Monitoring:** After each job run, the connector retrieves the AMT job log from the AMT database and attaches it to the OpCon job log. Review the full job output through the JORS system in Enterprise Manager.
+
+**Alerts:** Set each job's failure criteria in OpCon to accept only exit code 4 (DONE) as success. All other completion codes indicate a non-successful state and should trigger failure handling or notifications.
+
+**Performance and scaling:** The `STATUS_CHECK_POLL_INTERVAL` and `STATUS_CHECK_INITIAL_POLL_DELAY` settings in `Connector.config` control how frequently the connector polls the AMT web server. Increase these values for long-running jobs to reduce unnecessary polling.
+
+## FAQs
+
+**What exit code indicates a successful AMT job?**  
+Exit code 4 (DONE) is the only code that indicates the job completed normally. Configure OpCon failure criteria to treat all other exit codes as failures.
+
+**Can I use the same connector for jobs that target different AMT applications?**  
+Yes. The **Application Name** field on each job definition specifies the target application. Using the global token `[[AMT_APPLICATION]]` simplifies management when most jobs share the same application.
+
+**How do I view AMT job output after the job completes?**  
+The connector automatically retrieves AMT job log messages and attaches them to the OpCon job log. View the output through the JORS system in Enterprise Manager.
+
+## Examples
+
+**Scenario:** A job named `RUN_PARAMETERTESTA` in application `DEMO2` is submitted with the parameter `'PARAM'` and completes successfully.
+
+The following job log shows a complete run. The connector submitted the job, polled for status, received exit code 4 (DONE) from the AMT environment, and attached the full job output to the OpCon job log.
 
 ```
 5/18/2017 14:00:10:879 MSLSAM File Version 16.1.0.82 (Assembly version 16.1.0, Product Version 16.1.0.1195), PID : 1824
@@ -180,3 +267,15 @@ SMA_MSLSAM_PRERUN_ACTIVE=FALSE
 14:01:35.736 [main] [AMTConnector] 20170518 14:01:35 : -----------------------------------------------------------------------
 
 ```
+
+The final line `Connector completed with return code 4` confirms exit code 4 (DONE) — the expected successful outcome.
+
+## Glossary
+
+**BatchrequestId** — The identifier assigned to a job when it is submitted to the AMT batch queue. Visible in the job log output.
+
+**Completion code** — The exit code returned by the AMT environment when a job finishes, indicating the job's final state. Exit code 4 (DONE) is the only successful completion state.
+
+**JORS** — Job Output Retrieval System; the OpCon service that stores and serves job log output. AMT job logs are attached to OpCon job logs and are available through JORS.
+
+**RunAs** — The optional **User** field in the job definition that specifies the AMT user under which the task runs within the AMT environment.
