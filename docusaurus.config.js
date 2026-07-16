@@ -6,6 +6,9 @@ module.exports = {
   baseUrl: '/opcon/connectors/asysco-amt/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    format: "md",
+  },
   favicon: 'img/favicon.ico',
   organizationName: 'smatechnologies',
   projectName: 'asysco-amt-connector-docs',
