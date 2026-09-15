@@ -16,43 +16,15 @@ tags:
 
 The Asysco AMT Connector integrates OpCon with the Asysco LION environment, allowing OpCon to manage the scheduling of AMT batch processes through a RESTful web services interface.
 
-<div style={{display: 'flex', gap: '0.75rem', alignItems: 'flex-start', flexWrap: 'wrap', marginTop: '1rem'}}>
+## Overview
 
-<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
+- [Overview](./overview/overview.md) — what the connector does, how it works, and how to implement it
+- [Release notes](./release-notes.md) — version history and upgrade notes
 
-<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
+## Installation
 
-### Overview
+- [Installation](./installation.md) — install the connector and the job subtype, and configure `Connector.config`
 
-- [Overview](./overview/overview.md)
-- [Release Notes](./release-notes.md)
+## Operation
 
-</div>
-
-</div>
-
-<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
-
-<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
-
-### Installation
-
-- [Installation](./installation.md)
-
-</div>
-
-</div>
-
-<div style={{flex: '1', minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '0.6rem'}}>
-
-<div style={{background: 'var(--ifm-card-background-color)', border: '1px solid var(--ifm-color-emphasis-400)', borderRadius: '10px', padding: '0.75rem 1rem'}}>
-
-### Operation
-
-- [Operation](./operation.md)
-
-</div>
-
-</div>
-
-</div>
+- [Asysco AMT job definitions](./operation.md) — define AMT jobs in OpCon, and interpret completion codes
