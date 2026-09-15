@@ -10,12 +10,15 @@ tags:
 
 # Asysco AMT job definitions
 
-**Theme:** Configure  
-**Who Is It For?** Automation Engineer
-
 Within OpCon, job definitions are created using the Asysco AMT job subtype. The subtype is installed into the Enterprise Manager `dropins` directory during installation and is visible when a Windows job type is selected. The job subtype consists of an upper and a lower portion — the upper portion defines the connector location, the Windows user the connector runs under, and the job type.
 
-- Use this reference when creating or modifying AMT job definitions or when diagnosing a failed AMT job using completion codes
+Use this reference when you:
+
+- Create or modify AMT job definitions
+- Diagnose a failed AMT job using its completion code
+
+Two points are worth knowing before you begin:
+
 - AMT completion codes map directly to OpCon exit codes, giving standard OpCon dependency and event logic full control over AMT job outcomes
 - Job output is automatically attached to the OpCon job log when a job completes, eliminating manual log collection from the AMT environment
 
@@ -96,7 +99,7 @@ Completion Codes
 3	KILLED                 Job was terminated by a 'kill' command.
 4	DONE                   Job completed normally.
 5	SUSPENDED              Queued job has not started on time.
-6	SKIPPED_BY_OPS         Suspended Job has been skipped by control center.
+6	SKIPPED_BY_OP          Suspended Job has been skipped by control center.
 7	RUN_MANUAL             Job was started by control center.
 8	RUN_FORCED             Forced start manual, start this job even when job server halted.
 9	RUN_DEBUG              When a report is started from Visual Studio.
@@ -132,7 +135,7 @@ Completion Codes
 
 **Authorization:** The AMT user defined in `Connector.config` must have appropriate privileges in AMT Control Center. The optional **User** (RunAs) field on the job definition must also reference a user defined in AMT.
 
-**Data security:** Job parameters are transmitted to the AMT environment through the web services interface. Communication is encrypted using TLS when `SERVER_USES_TLS=True` in `Connector.config`.
+**Data security:** Job parameters are transmitted to the AMT environment through the web services interface. Communication is encrypted using TLS when `SERVER_USE_TLS=True` in `Connector.config`.
 
 **Sensitive data:** The **User** (RunAs) field references AMT user accounts. Do not use privileged AMT accounts unless required by the specific job.
 
@@ -162,7 +165,7 @@ The connector automatically retrieves AMT job log messages and attaches them to 
 The following job log shows a complete run. The connector submitted the job, polled for status, received exit code 4 (DONE) from the AMT environment, and attached the full job output to the OpCon job log.
 
 ```
-5/18/2017 14:00:10:879 MSLSAM File Version 16.1.0.82 (Assembly version 16.1.0, Product Version 16.1.0.1195), PID : 1824
+5/18/2017 14:00:10:879 Windows agent file version <version> (assembly version <version>, product version <version>), PID : <pid>
 5/18/2017 14:00:10:879 The Job Parameters are ...
 5/18/2017 14:00:10:879 JobName : TESTRUNPARAM     0000000194
 5/18/2017 14:00:10:879 JobStartImage : C:\connectors\asysco.amt\amt.exe
@@ -171,16 +174,16 @@ The following job log shows a complete run. The connector submitted the job, pol
 5/18/2017 14:00:10:879 Job User : Use Service Account
 5/18/2017 14:00:11:191 C:\connectors\asysco.amt\amt.exe , File Version : , Product Version : , FileSize : 50176, File Modification Time : 12/30/2016 8:12:40 AM
 5/18/2017 14:00:11:191 Job Environment : 
-COMPUTERNAME=AMTOPCON-TST-S1
+COMPUTERNAME=<connector host>
 SMA_MSLSAM_ROOT_DIRECTORY=C:\Program Files\OpConxps\MSLSAM
 PUBLIC=C:\Users\Public
 LOCALAPPDATA=C:\Windows\system32\config\systemprofile\AppData\Local
-PSModulePath=C:\Windows\system32\WindowsPowerShell\v1.0\Modules\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\PowerShell\Modules\
+PSModulePath=<PowerShell module path>
 PROCESSOR_ARCHITECTURE=AMD64
-Path=C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;
+Path=<system path>
 CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
 ProgramFiles(x86)=C:\Program Files (x86)
-PROCESSOR_LEVEL=6
+PROCESSOR_LEVEL=<level>
 ProgramFiles=C:\Program Files
 PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
 USERPROFILE=C:\Windows\system32\config\systemprofile
@@ -189,17 +192,17 @@ ALLUSERSPROFILE=C:\ProgramData
 SMA_MSLSAM_ECOF_DIRECTORY=
 FP_NO_HOST_CHECK=NO
 ProgramData=C:\ProgramData
-PROCESSOR_REVISION=3f02
-USERNAME=AMTOPCON-TST-S1$
+PROCESSOR_REVISION=<revision>
+USERNAME=<connector host>$
 CommonProgramW6432=C:\Program Files\Common Files
 SystemRoot=C:\Windows
 CommonProgramFiles=C:\Program Files\Common Files
 OS=Windows_NT
-PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 63 Stepping 2, GenuineIntel
+PROCESSOR_IDENTIFIER=<processor>
 ComSpec=C:\Windows\system32\cmd.exe
 SystemDrive=C:
 TEMP=C:\Windows\TEMP
-NUMBER_OF_PROCESSORS=2
+NUMBER_OF_PROCESSORS=<count>
 APPDATA=C:\Windows\system32\config\systemprofile\AppData\Roaming
 TMP=C:\Windows\TEMP
 ProgramW6432=C:\Program Files
@@ -208,19 +211,19 @@ USERDOMAIN=WORKGROUP
 SMA_MSLSAM_SAM_JOB_ID=TESTRUNPARAM     0000000194
 SMA_MSLSAM_JOB_NAME=TEST_RUN_PARAMETERTESTA 0000000194
 SMA_MSLSAM_SCHEDULE_DATE=20170518
-SMA_MSLSAM_SCHEDULE_NAME=AMT_TEST
+SMA_MSLSAM_SCHEDULE_NAME=<schedule name>
 SMA_MSLSAM_RESTART_STEP=
 SMA_MSLSAM_SCHEDULE_FREQ=ALLDAYS
 SMA_MSLSAM_ROOT_DIRECTORY=C:\Program Files\OpConxps\MSLSAM
 SMA_MSLSAM_DATA_DIRECTORY=C:\ProgramData\OpConxps\MSLSAM
 SMA_MSLSAM_ECOF_DIRECTORY=
-SMA_MSLSAM_LSAM_NAME=AMTOPCON-TST-S1
+SMA_MSLSAM_LSAM_NAME=<agent name>
 SMA_MSLSAM_JOBOUTPUT_FILENAME=C:\ProgramData\OpConxps\MSLSAM\JobOutput\Archives\2017_05_18 (Thursday)\TESTRUNPARAM_0000000194.log
 SMA_MSLSAM_PRERUN_ACTIVE=FALSE
 
 5/18/2017 14:00:11:191 Job Start Time : 140011
 5/18/2017 14:00:11:191 Job Process Name : amt
-5/18/2017 14:00:11:191 Job Process Id : 10080
+5/18/2017 14:00:11:191 Job Process Id : <pid>
 5/18/2017 14:00:11:191 Getting Job Termination Status for Job TESTRUNPARAM     0000000194
 5/18/2017 14:01:35:892 Job terminated with Exit Code : 0
 5/18/2017 14:01:35:892 Job finished at : 140135

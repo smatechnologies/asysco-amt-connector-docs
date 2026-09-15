@@ -11,10 +11,7 @@ tags:
 
 # Asysco AMT Connector overview
 
-**Theme:** Overview  
-**Who Is It For?** System Administrator, Automation Engineer
-
-The Asysco AMT Connector integrates OpCon with the Asysco LION environment, allowing OpCon to manage the scheduling of AMT batch jobs through a RESTful web services interface. The connector communicates with the AMTOpCon interface jointly developed by SMA and Asysco, inserting job definitions into the AMT database and monitoring job status until completion.
+The Asysco AMT Connector integrates OpCon with the Asysco LION environment, allowing OpCon to manage the scheduling of AMT batch jobs through a RESTful web services interface. The connector communicates with the AMTOpCon interface jointly developed by Continuous and Asysco, inserting job definitions into the AMT database and monitoring job status until completion.
 
 - Schedule and monitor Asysco AMT batch jobs from OpCon without managing the AMT internal scheduler separately
 - Retrieve AMT job output automatically through JORS, keeping job logs available alongside all other OpCon job history
@@ -22,9 +19,9 @@ The Asysco AMT Connector integrates OpCon with the Asysco LION environment, allo
 
 ## How the connector works
 
-The Asysco LION environment includes a basic scheduler that drives batch runs from within the Asysco environment. The SMA OpCon Asysco AMT Connector provides a tight connection between the OpCon environment and the Asysco LION environment, allowing OpCon to manage batch job scheduling.
+The Asysco LION environment includes a basic scheduler that drives batch runs from within the Asysco environment. The Asysco AMT Connector provides a tight connection between the OpCon environment and the Asysco LION environment, allowing OpCon to manage batch job scheduling.
 
-The implementation includes a connector that communicates with the AMTOpCon interface — a RESTful web services implementation jointly designed and developed by SMA and Asysco — allowing OpCon to communicate directly with the AMT database.
+The implementation includes a connector that communicates with the AMTOpCon interface — a RESTful web services implementation jointly designed and developed by Continuous and Asysco — allowing OpCon to communicate directly with the AMT database.
 
 All job definitions are stored in the AMT environment and run by the AMT Batch Scheduler. OpCon schedules predefined jobs by inserting job execution definitions into the database and adding an entry to the AMT Batch Scheduler queue. The connector then monitors the job's status. When the job completes, the connector retrieves the job log and makes it available via JORS.
 
@@ -62,8 +59,8 @@ The connector is configured using the `Connector.config` file in the installatio
 | Setting | What It Does | Default | Notes |
 |---|---|---|---|
 | **SERVER_ADDRESS** | Address and port number of the AMT web server | — | Required; example: `hostname:4004` |
-| **SERVER_USES_TLS** | Whether communication uses TLS encryption | True | Values are `True` or `False` |
-| **STATUS_CHECK_POLL_INTERVAL** | Seconds between status checks of a submitted job | 5 | Increase for long-running jobs to reduce unnecessary polling |
+| **SERVER_USE_TLS** | Whether communication uses TLS encryption | None | Values are `True` or `False` |
+| **STATUS_CHECK_POLL_INTERVAL** | Seconds between status checks of a submitted job | None | Increase for long-running jobs to reduce unnecessary polling |
 
 ## Exception handling
 
@@ -86,7 +83,7 @@ The connector is configured using the `Connector.config` file in the installatio
 
 **Authorization:** The AMT user must have the required privileges in AMT Control Center to submit jobs, monitor status, and retrieve messages.
 
-**Data security:** Communication between the connector and the AMT web server is encrypted using TLS when `SERVER_USES_TLS=True` in `Connector.config`.
+**Data security:** Communication between the connector and the AMT web server is encrypted using TLS when `SERVER_USE_TLS=True` in `Connector.config`.
 
 **Sensitive data:** USER and PASSWORD are credentials that must be encrypted using `Encrypt.exe` before storing in `Connector.config`. Do not store plain-text credential values.
 
@@ -115,7 +112,7 @@ The connector fails to submit the job. Configure OpCon retry logic or failure no
 
 ## Glossary
 
-**AMTOpCon interface** — The RESTful web services API jointly developed by SMA and Asysco that allows OpCon to communicate directly with the AMT database for job submission, status monitoring, and log retrieval.
+**AMTOpCon interface** — The RESTful web services API jointly developed by Continuous and Asysco that allows OpCon to communicate directly with the AMT database for job submission, status monitoring, and log retrieval.
 
 **AMT Batch Scheduler** — The scheduling component within the Asysco LION environment that processes submitted jobs and manages the batch queue.
 

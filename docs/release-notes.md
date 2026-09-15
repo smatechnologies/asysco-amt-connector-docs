@@ -16,10 +16,10 @@ tags:
 
 2025 July
 
-### What's new
+#### What's new
 
 :eight_spoked_asterisk: Updated connector to use embedded Java 11.
 
-### Why this matters
+#### Why this matters
 
 The connector now bundles a self-contained Java 11 runtime. When upgrading to this version, the job subtype must also be updated.
